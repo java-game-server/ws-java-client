@@ -1,0 +1,33 @@
+plugins {
+	id 'maven'
+    id 'net.ltgt.apt' version '0.10'
+    id 'io.franzbecker.gradle-lombok' version '1.11'
+    id 'java'
+    id 'org.springframework.boot' version '2.0.0.RELEASE'
+    id "io.spring.dependency-management" version "1.0.4.RELEASE"
+}
+
+jar {
+	enabled = true
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+	// This dependency is used internally, and not exposed to consumers on their own compile classpath.
+    implementation 'com.google.guava:guava:21.0'
+
+    // Use JUnit test framework
+    testImplementation 'junit:junit:4.12'
+	
+	// https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+	compile group: 'com.fasterxml.jackson.core', name: 'jackson-databind', version: '2.9.5'
+    
+    // https://mvnrepository.com/artifact/org.springframework.hateoas/spring-hateoas
+    compile 'org.springframework.hateoas:spring-hateoas:0.24.0.RELEASE'
+    
+	compile fileTree(dir: 'libs', include: '*.jar')
+    
+}
