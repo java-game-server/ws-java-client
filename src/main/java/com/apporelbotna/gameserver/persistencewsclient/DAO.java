@@ -64,7 +64,8 @@ public class DAO
 		ResponseEntity<List<Game>> responseWS = restTemplate.exchange(
 				SERVER_URL + "/user/game/" + userEmail, HttpMethod.GET, null,
 				new ParameterizedTypeReference<List<Game>>()
-				{});
+				{
+				});
 
 		return responseWS.getBody();
 	}
@@ -74,10 +75,16 @@ public class DAO
 		RestTemplate restTemplate = new RestTemplate();
 		RegisterUser userToRegister = new RegisterUser(user, password);
 
-		ResponseEntity<?> response = restTemplate.postForEntity(SERVER_URL + "user",
-				userToRegister, null);
+		ResponseEntity<?> response = restTemplate.postForEntity(SERVER_URL + "user", userToRegister,
+				null);
 
 		return (response.getStatusCode().equals(HttpStatus.CREATED));
+	}
+
+	public User getUserInformation(String email)
+	{
+		RestTemplate restTemplate = new RestTemplate();
+		return restTemplate.getForObject(SERVER_URL+ "/user/" + email, User.class);
 	}
 
 	public static void main(String[] args)
@@ -85,10 +92,10 @@ public class DAO
 		DAO dao = new DAO();
 
 		// Creating User
-		User user = new User("janJanitoJwzdf3ssssanbo@Tronchaco.com", "Jan");
-		String password = "1234";
-
-		System.out.println(dao.createUser(user, password));
+		// User user = new User("janJanitoJwzdf3ssssanbo@Tronchaco.com", "Jan");
+		// String password = "1234";
+		//
+		// System.out.println(dao.createUser(user, password));
 
 		// Testing log in
 		//
@@ -105,10 +112,10 @@ public class DAO
 		// }
 
 		// TEST USER INFORMATION
-		/*
-		 * User userInformatiton = dao.getUserInformation(new
-		 * User("jan@jan.com","jan")); System.out.println(userInformatiton);
-		 */
+
+		// User userInformatiton = dao.getUserInformation("jan@jan.com");
+		// System.out.println(userInformatiton);
+
 	}
 
 }
