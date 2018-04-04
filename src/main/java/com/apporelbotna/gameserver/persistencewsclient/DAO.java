@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import com.apporelbotna.gameserver.stubs.Game;
+import com.apporelbotna.gameserver.stubs.RankingPointsTO;
 import com.apporelbotna.gameserver.stubs.RegisterUser;
 import com.apporelbotna.gameserver.stubs.Token;
 import com.apporelbotna.gameserver.stubs.User;
@@ -21,29 +22,39 @@ import com.apporelbotna.gameserver.stubs.UserWrapper;
 public class DAO
 {
 	public static final String SERVER_URL = "http://localhost:8082/";
+	RestTemplate restTemplate = new RestTemplate();
 
 	public DAO()
 	{
 
 	}
 
-	public User getUserInformation(User user, Token token)
+//	public boolean isUserLoggeable(String email, String tokenString)
+//	{
+//		UserWrapper wrapper = new UserWrapper(new User(email), new Token(tokenString));
+//
+//		ResponseEntity<?> response = restTemplate.postForEntity(SERVER_URL + "/auth", wrapper,
+//				null);
+//
+//		return (response.getStatusCode().equals(HttpStatus.OK));
+//	}
+
+	 public boolean isUserLoggeable(String email, String tokenString)
+	 {
+	 UserWrapper wrapper = new UserWrapper(new User(email), new
+	 Token(tokenString));
+
+	 HttpStatus response = restTemplate
+	 .getForObject(SERVER_URL + "/auth/" + email + "/" + tokenString,
+	 HttpStatus.class);
+
+	 return (response.equals(HttpStatus.OK));
+	 }
+
+	public User validateUser(String email, String tokenString)
 	{
-		// TODO implement
-		RestTemplate restTemplate = new RestTemplate();
 
-		ResponseEntity<User> userResponse = restTemplate
-				.getForEntity(SERVER_URL + "" + user.getId(), User.class);
-
-		return userResponse.getBody();
-	}
-
-	// METHOD CheckUserToken
-	// create metodo que verifique si el user tiene un token
-	public boolean isUserLoggeable(UserWrapper userWrapper)
-	{
-
-		return true;
+		return null;
 	}
 
 	public UserWrapper login(String email, String password)
@@ -72,19 +83,41 @@ public class DAO
 
 	public boolean createUser(User user, String password)
 	{
-		RestTemplate restTemplate = new RestTemplate();
 		RegisterUser userToRegister = new RegisterUser(user, password);
 
-		ResponseEntity<?> response = restTemplate.postForEntity(SERVER_URL + "user", userToRegister,
-				null);
+		ResponseEntity<?> response = restTemplate.postForEntity(SERVER_URL + "/user/",
+				userToRegister, null);
 
 		return (response.getStatusCode().equals(HttpStatus.CREATED));
 	}
 
 	public User getUserInformation(String email)
 	{
-		RestTemplate restTemplate = new RestTemplate();
-		return restTemplate.getForObject(SERVER_URL+ "/user/" + email, User.class);
+		return restTemplate.getForObject(SERVER_URL + "/user/" + email, User.class);
+	}
+
+	/**
+	 *
+	 * @param email
+	 * @param gameID
+	 * @return time in miliseconds
+	 */
+	public float gameTimePlayedByGame(String email, int gameID)
+	{
+		return restTemplate.getForObject(
+				SERVER_URL + "/user/" + email + "/game/" + gameID + "/time/", Float.class);
+	}
+
+	public List<RankingPointsTO> getRankingPointsByGameAndUser(int gameId)
+	{
+
+		ResponseEntity<List<RankingPointsTO>> responseWS = restTemplate.exchange(
+				SERVER_URL + "/ranking/" + gameId, HttpMethod.GET, null,
+				new ParameterizedTypeReference<List<RankingPointsTO>>()
+				{
+				});
+
+		return responseWS.getBody();
 	}
 
 	public static void main(String[] args)
@@ -115,6 +148,21 @@ public class DAO
 
 		// User userInformatiton = dao.getUserInformation("jan@jan.com");
 		// System.out.println(userInformatiton);
+
+		// GET TIME PLAYED IN GAME
+		// String email = "jan@jan.com";
+		// int game = 1;
+		// System.out.println(dao.gameTimePlayedByGame(email, game));
+
+		// List<RankingPointsTO> ranking = dao.getRankingPointsByGameAndUser(1);
+		// for (RankingPointsTO rankingPointsTO : ranking)
+		// {
+		// System.out.println(rankingPointsTO);
+		// }
+
+		// Auth
+		System.out.println(
+				dao.isUserLoggeable("testStore@teststore.com", "114e39264fd343e98e138837172a9e36"));
 
 	}
 
