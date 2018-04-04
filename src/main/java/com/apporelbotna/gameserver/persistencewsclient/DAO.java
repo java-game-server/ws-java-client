@@ -1,19 +1,18 @@
 package com.apporelbotna.gameserver.persistencewsclient;
 
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import com.apporelbotna.gameserver.stubs.Game;
+import com.apporelbotna.gameserver.stubs.RegisterUser;
 import com.apporelbotna.gameserver.stubs.Token;
 import com.apporelbotna.gameserver.stubs.User;
 import com.apporelbotna.gameserver.stubs.UserWrapper;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 //TODO los memtodos devuelven un HttpStatus que es el code de segun si ha ido bien, mal, etc.
 //esto se podria hacer alguna clase que controlase los codigos que se mostraran en la applicacion
@@ -65,39 +64,20 @@ public class DAO
 		ResponseEntity<List<Game>> responseWS = restTemplate.exchange(
 				SERVER_URL + "/user/game/" + userEmail, HttpMethod.GET, null,
 				new ParameterizedTypeReference<List<Game>>()
-				{
-				});
+				{});
 
 		return responseWS.getBody();
 	}
 
-	public String createUser(User user, String password)
+	public boolean createUser(User user, String password)
 	{
 		RestTemplate restTemplate = new RestTemplate();
+		RegisterUser userToRegister = new RegisterUser(user, password);
 
-		ObjectMapper mapper = new ObjectMapper();
-		try
-		{
-//			System.out.println(mapper.writeValueAsString(user));
-//			System.out.println(mapper.writeValueAsString(password));
+		ResponseEntity<?> response = restTemplate.postForEntity(SERVER_URL + "user",
+				userToRegister, null);
 
-			// Create the node factory that gives us nodes.
-			Map<String, Object> map = mapper.readValue(json, new TypeReference<Map<String,Object>>(){});
-
-
-
-		} catch (JsonProcessingException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		// objMapper.
-
-//		ResponseEntity<String> response = restTemplate.postForEntity(SERVER_URL + "user",
-//				userWrapper, null);
-
-		return null;
+		return (response.getStatusCode().equals(HttpStatus.CREATED));
 	}
 
 	public static void main(String[] args)
@@ -105,10 +85,10 @@ public class DAO
 		DAO dao = new DAO();
 
 		// Creating User
-		 User user = new User("janJanitoJwzdf3sssanbo@Tronchaco.com", "Jan");
-		 String password = "1234";
+		User user = new User("janJanitoJwzdf3ssssanbo@Tronchaco.com", "Jan");
+		String password = "1234";
 
-		 System.out.println(dao.createUser(user, password));
+		System.out.println(dao.createUser(user, password));
 
 		// Testing log in
 		//
