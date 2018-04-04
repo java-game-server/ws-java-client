@@ -13,6 +13,7 @@ jar {
 
 repositories {
     jcenter()
+    maven { url 'https://jitpack.io/' }
 }
 
 dependencies {
@@ -25,6 +26,7 @@ dependencies {
     // https://mvnrepository.com/artifact/org.springframework.hateoas/spring-hateoas
     compile 'org.springframework.hateoas:spring-hateoas:0.24.0.RELEASE'
     
-	compile fileTree(dir: 'libs', include: '*.jar')
+    	// PersistenceWS Stubs
+    compileOnly 'com.github.java-game-server:stubs:0.6.2'
     
 }

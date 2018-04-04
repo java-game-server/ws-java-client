@@ -15,7 +15,7 @@ import com.apporelbotna.gameserver.stubs.Token;
 import com.apporelbotna.gameserver.stubs.User;
 import com.apporelbotna.gameserver.stubs.UserWrapper;
 
-//TODO los memtodos devuelven un HttpStatus que es el code de segun si ha ido bien, mal, etc.
+//TODO los metodos devuelven un HttpStatus que es el code de segun si ha ido bien, mal, etc.
 //esto se podria hacer alguna clase que controlase los codigos que se mostraran en la applicacion
 //personalizados y en diferentes idiomas
 
@@ -28,16 +28,6 @@ public class DAO
 	{
 
 	}
-
-//	public boolean isUserLoggeable(String email, String tokenString)
-//	{
-//		UserWrapper wrapper = new UserWrapper(new User(email), new Token(tokenString));
-//
-//		ResponseEntity<?> response = restTemplate.postForEntity(SERVER_URL + "/auth", wrapper,
-//				null);
-//
-//		return (response.getStatusCode().equals(HttpStatus.OK));
-//	}
 
 	 public boolean isUserLoggeable(String email, String tokenString)
 	 {
@@ -53,7 +43,7 @@ public class DAO
 
 	public User validateUser(String email, String tokenString)
 	{
-
+		//TODO implement
 		return null;
 	}
 
@@ -120,50 +110,6 @@ public class DAO
 		return responseWS.getBody();
 	}
 
-	public static void main(String[] args)
-	{
-		DAO dao = new DAO();
 
-		// Creating User
-		// User user = new User("janJanitoJwzdf3ssssanbo@Tronchaco.com", "Jan");
-		// String password = "1234";
-		//
-		// System.out.println(dao.createUser(user, password));
-
-		// Testing log in
-		//
-		// String email = "jan@jan.com";
-		// String password = "1234";
-		// Token token = dao.login(email, password);
-		// System.out.println(token);
-
-		// Find all games by username
-		// List<Game> games = dao.findAllGamesByUser(new User("jan@jan.com", "pp"));
-		// for (Game game : games)
-		// {
-		// System.out.println(game);
-		// }
-
-		// TEST USER INFORMATION
-
-		// User userInformatiton = dao.getUserInformation("jan@jan.com");
-		// System.out.println(userInformatiton);
-
-		// GET TIME PLAYED IN GAME
-		// String email = "jan@jan.com";
-		// int game = 1;
-		// System.out.println(dao.gameTimePlayedByGame(email, game));
-
-		// List<RankingPointsTO> ranking = dao.getRankingPointsByGameAndUser(1);
-		// for (RankingPointsTO rankingPointsTO : ranking)
-		// {
-		// System.out.println(rankingPointsTO);
-		// }
-
-		// Auth
-		System.out.println(
-				dao.isUserLoggeable("testStore@teststore.com", "114e39264fd343e98e138837172a9e36"));
-
-	}
 
 }
