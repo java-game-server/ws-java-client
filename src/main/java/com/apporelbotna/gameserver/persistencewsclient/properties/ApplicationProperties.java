@@ -1,8 +1,6 @@
 package com.apporelbotna.gameserver.persistencewsclient.properties;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.Properties;
+import java.util.ResourceBundle;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,22 +21,13 @@ public final class ApplicationProperties
 
 	static
 	{
-		String rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
-		String applicationPropertiesPath = rootPath + "com\\apporelbotna\\gameserver\\persistencewsclient\\properties\\application.properties";
+		ResourceBundle bundle = ResourceBundle
+				.getBundle("com.apporelbotna.gameserver.pongserver.properties.application");
 
-		Properties applicationProperties = new Properties();
-		try
-		{
-			applicationProperties.load(new FileInputStream(applicationPropertiesPath));
-			version = applicationProperties.getProperty("version");
-			name = applicationProperties.getProperty("name");
+		version = bundle.getString("version");
+		name = bundle.getString("name");
 
-			serverUrl = applicationProperties.getProperty("server.url");
-		}
-		catch (IOException e)
-		{
-			logger.error(e.getMessage());
-		}
+		serverUrl = bundle.getString("server.url");
 	}
 
 	public static String getVersion()
