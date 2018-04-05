@@ -19,12 +19,12 @@ import com.apporelbotna.gameserver.stubs.UserWrapper;
 //esto se podria hacer alguna clase que controlase los codigos que se mostraran en la applicacion
 //personalizados y en diferentes idiomas
 
-public class DAO
+public class GameDAO
 {
 	public static final String SERVER_URL = "http://localhost:8082/";
 	RestTemplate restTemplate = new RestTemplate();
 
-	public DAO()
+	public GameDAO()
 	{
 
 	}
