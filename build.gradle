@@ -27,6 +27,6 @@ dependencies {
     compileOnly 'org.springframework.hateoas:spring-hateoas:0.24.0.RELEASE'
     
     	// PersistenceWS Stubs
-    compileOnly 'com.github.java-game-server:stubs:0.6.2'
+    compile 'com.github.java-game-server:stubs:0.6.2'
     
 }
