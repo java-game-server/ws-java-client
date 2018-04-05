@@ -16,11 +16,11 @@ import com.apporelbotna.gameserver.stubs.Token;
 import com.apporelbotna.gameserver.stubs.User;
 import com.apporelbotna.gameserver.stubs.UserWrapper;
 
-public class DAO {
+public class GameDAO {
 	public static final String SERVER_URL = "http://localhost:8082/";
 	RestTemplate restTemplate = new RestTemplate();
 
-	public DAO() {
+	public GameDAO() {
 
 	}
 
