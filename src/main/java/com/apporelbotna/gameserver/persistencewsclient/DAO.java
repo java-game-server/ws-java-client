@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import com.apporelbotna.gameserver.stubs.Game;
+import com.apporelbotna.gameserver.stubs.Match;
 import com.apporelbotna.gameserver.stubs.RankingPointsTO;
 import com.apporelbotna.gameserver.stubs.RegisterUser;
 import com.apporelbotna.gameserver.stubs.Token;
@@ -19,80 +20,67 @@ import com.apporelbotna.gameserver.stubs.UserWrapper;
 //esto se podria hacer alguna clase que controlase los codigos que se mostraran en la applicacion
 //personalizados y en diferentes idiomas
 
-public class DAO
-{
+public class DAO {
 	public static final String SERVER_URL = "http://localhost:8082/";
 	RestTemplate restTemplate = new RestTemplate();
 
-	public DAO()
-	{
+	public DAO() {
 
 	}
 
-//	public boolean isUserLoggeable(String email, String tokenString)
-//	{
-//		UserWrapper wrapper = new UserWrapper(new User(email), new Token(tokenString));
-//
-//		ResponseEntity<?> response = restTemplate.postForEntity(SERVER_URL + "/auth", wrapper,
-//				null);
-//
-//		return (response.getStatusCode().equals(HttpStatus.OK));
-//	}
+	public boolean finishMatch(Match... matches) {
 
-	 public boolean isUserLoggeable(String email, String tokenString)
-	 {
-	 UserWrapper wrapper = new UserWrapper(new User(email), new
-	 Token(tokenString));
+		for (Match match : matches) {
+			ResponseEntity<?> response = restTemplate.postForEntity(SERVER_URL + "/match", match, null);
+			if (!response.getStatusCode().equals(HttpStatus.CREATED)) {
+				return false;
+			}
+		}
 
-	 HttpStatus response = restTemplate
-	 .getForObject(SERVER_URL + "/auth/" + email + "/" + tokenString,
-	 HttpStatus.class);
-
-	 return (response.equals(HttpStatus.OK));
-	 }
-
-	public User validateUser(String email, String tokenString)
-	{
-
-		return null;
+		return true;
 	}
 
-	public UserWrapper login(String email, String password)
-	{
+	public boolean isUserLoggeable(String email, String tokenString) {
+
+		UserWrapper wrapper = new UserWrapper(new User(email), new Token(tokenString));
+
+		ResponseEntity<?> response = restTemplate.postForEntity(SERVER_URL + "/auth", wrapper, null);
+
+		return (response.getStatusCode().equals(HttpStatus.OK));
+	}
+
+	public User validateUser(String email, String tokenString) {
+		return isUserLoggeable(email, tokenString) ? getUserInformation(email) : null;
+	}
+
+	public Token login(String email, String password) {
 
 		RestTemplate restTemplate = new RestTemplate();
-		return restTemplate.getForObject(SERVER_URL + "/login/" + email + "/" + password,
-				UserWrapper.class);
+		return restTemplate.getForObject(SERVER_URL + "/login/" + email + "/" + password, Token.class);
 	}
 
 	// saca todos los juegos de un usuario
-	public List<Game> findAllGamesByUser(User user)
-	{
+	public List<Game> findAllGamesByUser(User user) {
 		String userEmail = user.getId();
 
 		RestTemplate restTemplate = new RestTemplate();
 
-		ResponseEntity<List<Game>> responseWS = restTemplate.exchange(
-				SERVER_URL + "/user/game/" + userEmail, HttpMethod.GET, null,
-				new ParameterizedTypeReference<List<Game>>()
-				{
+		ResponseEntity<List<Game>> responseWS = restTemplate.exchange(SERVER_URL + "/user/game/" + userEmail,
+				HttpMethod.GET, null, new ParameterizedTypeReference<List<Game>>() {
 				});
 
 		return responseWS.getBody();
 	}
 
-	public boolean createUser(User user, String password)
-	{
+	public boolean createUser(User user, String password) {
 		RegisterUser userToRegister = new RegisterUser(user, password);
 
-		ResponseEntity<?> response = restTemplate.postForEntity(SERVER_URL + "/user/",
-				userToRegister, null);
+		ResponseEntity<?> response = restTemplate.postForEntity(SERVER_URL + "/user/", userToRegister, null);
 
 		return (response.getStatusCode().equals(HttpStatus.CREATED));
 	}
 
-	public User getUserInformation(String email)
-	{
+	public User getUserInformation(String email) {
 		return restTemplate.getForObject(SERVER_URL + "/user/" + email, User.class);
 	}
 
@@ -102,36 +90,30 @@ public class DAO
 	 * @param gameID
 	 * @return time in miliseconds
 	 */
-	public float gameTimePlayedByGame(String email, int gameID)
-	{
-		return restTemplate.getForObject(
-				SERVER_URL + "/user/" + email + "/game/" + gameID + "/time/", Float.class);
+	public float gameTimePlayedByGame(String email, int gameID) {
+		return restTemplate.getForObject(SERVER_URL + "/user/" + email + "/game/" + gameID + "/time/", Float.class);
 	}
 
-	public List<RankingPointsTO> getRankingPointsByGameAndUser(int gameId)
-	{
+	public List<RankingPointsTO> getRankingPointsByGameAndUser(int gameId) {
 
-		ResponseEntity<List<RankingPointsTO>> responseWS = restTemplate.exchange(
-				SERVER_URL + "/ranking/" + gameId, HttpMethod.GET, null,
-				new ParameterizedTypeReference<List<RankingPointsTO>>()
-				{
+		ResponseEntity<List<RankingPointsTO>> responseWS = restTemplate.exchange(SERVER_URL + "/ranking/" + gameId,
+				HttpMethod.GET, null, new ParameterizedTypeReference<List<RankingPointsTO>>() {
 				});
 
 		return responseWS.getBody();
 	}
 
-	public static void main(String[] args)
-	{
+	public static void main(String[] args) {
 		DAO dao = new DAO();
 
 		// Creating User
-		// User user = new User("janJanitoJwzdf3ssssanbo@Tronchaco.com", "Jan");
-		// String password = "1234";
-		//
+		// User user = new User("Raikish@Tronchaco.com", "rai");
+		// String password = "123456";
+
 		// System.out.println(dao.createUser(user, password));
 
 		// Testing log in
-		//
+
 		// String email = "jan@jan.com";
 		// String password = "1234";
 		// Token token = dao.login(email, password);
@@ -154,15 +136,20 @@ public class DAO
 		// int game = 1;
 		// System.out.println(dao.gameTimePlayedByGame(email, game));
 
+		// Test ranking
 		// List<RankingPointsTO> ranking = dao.getRankingPointsByGameAndUser(1);
-		// for (RankingPointsTO rankingPointsTO : ranking)
-		// {
+		// for (RankingPointsTO rankingPointsTO : ranking) {
 		// System.out.println(rankingPointsTO);
 		// }
 
 		// Auth
-		System.out.println(
-				dao.isUserLoggeable("testStore@teststore.com", "114e39264fd343e98e138837172a9e36"));
+		// System.out.println(dao.validateUser("testStore@teststore.com",
+		// "114e39264fd343e98e138837172a9e36"));
+
+		// Finish match
+		// Match match1 = new Match("jan@jan.com", 1, 30000, 25);
+		// Match match2 = new Match("jan1@jan.com", 1, 30000, -25);
+		// System.out.println(dao.finishMatch(match1, match2));
 
 	}
 
