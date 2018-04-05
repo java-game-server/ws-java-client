@@ -9,15 +9,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import com.apporelbotna.gameserver.stubs.Game;
+import com.apporelbotna.gameserver.stubs.Match;
 import com.apporelbotna.gameserver.stubs.RankingPointsTO;
 import com.apporelbotna.gameserver.stubs.RegisterUser;
 import com.apporelbotna.gameserver.stubs.Token;
 import com.apporelbotna.gameserver.stubs.User;
 import com.apporelbotna.gameserver.stubs.UserWrapper;
-
-//TODO los metodos devuelven un HttpStatus que es el code de segun si ha ido bien, mal, etc.
-//esto se podria hacer alguna clase que controlase los codigos que se mostraran en la applicacion
-//personalizados y en diferentes idiomas
 
 public class GameDAO
 {
@@ -29,30 +26,44 @@ public class GameDAO
 
 	}
 
-	 public boolean isUserLoggeable(String email, String tokenString)
-	 {
-	 UserWrapper wrapper = new UserWrapper(new User(email), new
-	 Token(tokenString));
+	public boolean finishMatch(Match... matches)
+	{
 
-	 HttpStatus response = restTemplate
-	 .getForObject(SERVER_URL + "/auth/" + email + "/" + tokenString,
-	 HttpStatus.class);
+		for (Match match : matches)
+		{
+			ResponseEntity<?> response = restTemplate.postForEntity(SERVER_URL + "/match", match,
+					null);
+			if (!response.getStatusCode().equals(HttpStatus.CREATED))
+			{
+				return false;
+			}
+		}
 
-	 return (response.equals(HttpStatus.OK));
-	 }
+		return true;
+	}
+
+	public boolean isUserLoggeable(String email, String tokenString)
+	{
+
+		UserWrapper wrapper = new UserWrapper(new User(email), new Token(tokenString));
+
+		ResponseEntity<?> response = restTemplate.postForEntity(SERVER_URL + "/auth", wrapper,
+				null);
+
+		return (response.getStatusCode().equals(HttpStatus.OK));
+	}
 
 	public User validateUser(String email, String tokenString)
 	{
-		//TODO implement
-		return null;
+		return isUserLoggeable(email, tokenString) ? getUserInformation(email) : null;
 	}
 
-	public UserWrapper login(String email, String password)
+	public Token login(String email, String password)
 	{
 
 		RestTemplate restTemplate = new RestTemplate();
 		return restTemplate.getForObject(SERVER_URL + "/login/" + email + "/" + password,
-				UserWrapper.class);
+				Token.class);
 	}
 
 	// saca todos los juegos de un usuario
@@ -109,7 +120,5 @@ public class GameDAO
 
 		return responseWS.getBody();
 	}
-
-
 
 }

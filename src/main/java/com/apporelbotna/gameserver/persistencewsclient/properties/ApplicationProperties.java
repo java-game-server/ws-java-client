@@ -2,13 +2,8 @@ package com.apporelbotna.gameserver.persistencewsclient.properties;
 
 import java.util.ResourceBundle;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 public final class ApplicationProperties
 {
-	private static final Logger logger = LoggerFactory.getLogger(ApplicationProperties.class);
-
 	private static String version;
 	private static String name;
 
