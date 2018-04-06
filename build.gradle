@@ -19,6 +19,9 @@ repositories {
 dependencies {
 	// This dependency is used internally, and not exposed to consumers on their own compile classpath.
     implementation 'com.google.guava:guava:21.0'
+    
+    // https://mvnrepository.com/artifact/org.springframework.hateoas/spring-hateoas
+    implementation 'org.springframework.hateoas:spring-hateoas:0.24.0.RELEASE'
 
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
