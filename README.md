@@ -12,8 +12,8 @@ https://jitpack.io/#java-game-server/ws-java-client/3.0.0
 * Crear usuarios
 * Logearse
 * Autentificar el token de un usuario
-* obtener el array de juegos de un usuario
-* obtener toda la informacion de un usuario incluido los juegos
-* obtener el tiempo juegado de un usuario a un juego
-* obtener el ranking de usuarios en un juego por puntos
-* guardar una partida finalizada
+* Obtener el array de juegos de un usuario
+* Obtener toda la informacion de un usuario incluido los juegos
+* Obtener el tiempo juegado de un usuario a un juego
+* Obtener el ranking de usuarios en un juego por puntos
+* Guardar una partida finalizada
