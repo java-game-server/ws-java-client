@@ -17,3 +17,8 @@ https://jitpack.io/#java-game-server/ws-java-client/3.0.0
 * Obtener el tiempo juegado de un usuario a un juego
 * Obtener el ranking de usuarios en un juego por puntos
 * Guardar una partida finalizada
+
+#### On progres...
+* Actualizar pefil usuario
+* Crear juegos 
+* Actualizar la contraseña del usuario
