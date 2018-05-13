@@ -8,7 +8,7 @@ https://jitpack.io/#java-game-server/ws-java-client/3.0.0
 
 ***
 
-### functionalities
+### Functionalities
 * Crear usuarios
 * Logearse
 * Autentificar el token de un usuario
