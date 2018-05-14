@@ -18,7 +18,7 @@ https://jitpack.io/#java-game-server/ws-java-client
 * Obtener el ranking de usuarios en un juego por puntos
 * Guardar una partida finalizada
 
-#### On progres...
+#### On progress...
 * Actualizar pefil usuario
 * Crear juegos 
 * Actualizar la contraseña del usuario
