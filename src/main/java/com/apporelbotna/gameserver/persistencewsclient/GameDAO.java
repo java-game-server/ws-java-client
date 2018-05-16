@@ -95,7 +95,7 @@ public class GameDAO
     public void storeGameToUser(User user, int idGame)
     {
 	Map< String , String > params = new HashMap<>();
-	params.put( "id", String.valueOf( idGame ) );
+	params.put( "idGame", String.valueOf( idGame ) );
 
 	restTemplate.put( SERVER_URL + "/game/{idGame}", user, params );
     }
@@ -194,5 +194,12 @@ public class GameDAO
 			{ //
 			} );
 	return responseWS.getBody();
+    }
+
+    public static void main( String[] args )
+    {
+	GameDAO dao = new GameDAO();
+
+	dao.storeGameToUser( new User( "jan@jan.com" ) , 6 );
     }
 }
