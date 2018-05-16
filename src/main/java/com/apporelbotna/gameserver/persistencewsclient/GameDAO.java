@@ -21,8 +21,8 @@ import com.apporelbotna.gameserver.stubs.UserWrapper;
 public class GameDAO
 {
     // Stucky server
-    // public static final String SERVER_URL = "http://172.16.2.94:8082/";
-    public static final String SERVER_URL = "http://localhost:8082/";
+    public static final String SERVER_URL = "http://172.16.2.94:8082/";
+   // public static final String SERVER_URL = "http://localhost:8082/";
 
     RestTemplate restTemplate = new RestTemplate();
 
